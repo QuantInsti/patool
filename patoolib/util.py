@@ -213,19 +213,24 @@ def run (cmd, verbosity=0, **kwargs):
         # hide command output on stdout
         with open(os.devnull, 'wb') as devnull:
             kwargs['stdout'] = devnull
-            res = subprocess.call(cmd, **kwargs)
-    else:
-        res = subprocess.call(cmd, **kwargs)
+
+    if 'cwd' in kwargs:
+        cmd.append(kwargs['cwd'])
+
+    proc = subprocess.Popen(cmd, stdout=subprocess.PIPE)
+    out, err = proc.communicate()
+    res = {'retcode': proc.returncode, 'out': out}
     return res
 
 
 def run_checked (cmd, ret_ok=(0,), **kwargs):
     """Run command and raise PatoolError on error."""
-    retcode = run(cmd, **kwargs)
+    ret = run(cmd, **kwargs)
+    retcode = ret['retcode']
     if retcode not in ret_ok:
         msg = "Command `%s' returned non-zero exit status %d" % (cmd, retcode)
         raise PatoolError(msg)
-    return retcode
+    return retcode['out']
 
 
 @memoized

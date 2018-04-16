@@ -540,7 +540,7 @@ def _handle_archive(archive, command, verbosity=0, interactive=True,
         # an empty command list means the get_archive_cmdlist() function
         # already handled the command (eg. when it's a builtin Python
         # function)
-        run_archive_cmdlist(cmdlist, verbosity=verbosity)
+        return run_archive_cmdlist(cmdlist, verbosity=verbosity)
 
 
 def get_archive_cmdlist_func (program, command, format):
