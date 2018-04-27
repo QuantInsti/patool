@@ -230,7 +230,7 @@ def run_checked (cmd, ret_ok=(0,), **kwargs):
     if retcode not in ret_ok:
         msg = "Command `%s' returned non-zero exit status %d" % (cmd, retcode)
         raise PatoolError(msg)
-    return retcode['out']
+    return ret['out']
 
 
 @memoized
